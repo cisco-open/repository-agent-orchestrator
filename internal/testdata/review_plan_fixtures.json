@@ -1,0 +1,151 @@
+[
+  {
+    "name": "small-localized",
+    "files": [
+      {
+        "path": "internal/config.go",
+        "additions": 10,
+        "deletions": 2
+      },
+      {
+        "path": "internal/config_test.go",
+        "additions": 8,
+        "deletions": 1
+      }
+    ],
+    "acceptance_criteria": [
+      "Configuration remains strict."
+    ],
+    "risk_tags": []
+  },
+  {
+    "name": "multiple-review-domains",
+    "files": [
+      {
+        "path": "internal/lifecycle/runner.go",
+        "additions": 250,
+        "deletions": 50
+      },
+      {
+        "path": "internal/persistence/state.go",
+        "additions": 300,
+        "deletions": 100
+      },
+      {
+        "path": "internal/security/auth.go",
+        "additions": 250,
+        "deletions": 100
+      },
+      {
+        "path": "internal/worker/poll.go",
+        "additions": 100,
+        "deletions": 50
+      }
+    ],
+    "acceptance_criteria": [
+      "Cancellation stops poll workers cleanly."
+    ],
+    "risk_tags": [
+      "concurrency",
+      "lifecycle",
+      "persistence",
+      "security",
+      "test-coverage"
+    ]
+  },
+  {
+    "name": "unknown-file-fallback",
+    "files": [
+      {
+        "path": "mystery/opaque.xyz",
+        "additions": 0,
+        "deletions": 0,
+        "binary": true
+      }
+    ],
+    "acceptance_criteria": [],
+    "risk_tags": []
+  },
+  {
+    "name": "mixed-documentation-rules",
+    "files": [
+      {
+        "path": "README.md",
+        "additions": 4,
+        "deletions": 1
+      },
+      {
+        "path": "docs/guide.md",
+        "additions": 8,
+        "deletions": 2
+      }
+    ],
+    "acceptance_criteria": [],
+    "risk_tags": []
+  },
+  {
+    "name": "test-path-conventions",
+    "files": [
+      {
+        "path": "test_widget.py",
+        "additions": 1,
+        "deletions": 0
+      },
+      {
+        "path": "widget_test.py",
+        "additions": 1,
+        "deletions": 0
+      },
+      {
+        "path": "spec/widget.rb",
+        "additions": 1,
+        "deletions": 0
+      },
+      {
+        "path": "src/TestWidget.java",
+        "additions": 1,
+        "deletions": 0
+      },
+      {
+        "path": "src/WidgetTest.java",
+        "additions": 1,
+        "deletions": 0
+      },
+      {
+        "path": "src/unit_tests/widget.py",
+        "additions": 1,
+        "deletions": 0
+      }
+    ],
+    "acceptance_criteria": [],
+    "risk_tags": []
+  },
+  {
+    "name": "implementation-without-test",
+    "files": [
+      {
+        "path": "src/widget.py",
+        "additions": 1,
+        "deletions": 0
+      }
+    ],
+    "acceptance_criteria": [],
+    "risk_tags": [
+      "test-coverage"
+    ],
+    "risk_reasons": [
+      {
+        "tag": "test-coverage",
+        "reasons": [
+          "coverage-gap rule found 1 implementation path(s) and no changed test path"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "empty-diff",
+    "files": [],
+    "acceptance_criteria": [],
+    "risk_tags": []
+  }
+]

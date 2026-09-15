@@ -1,0 +1,124 @@
+# SPDX-License-Identifier: Apache-2.0
+#
+# Copyright 2026 Cisco Systems, Inc. and its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+REPO_OWNER: your-github-org-or-user
+REPO_NAME: your-repository
+REPO_PATH: /absolute/path/to/your/local/repository
+LOG_PATH: /absolute/path/to/your/local/repository
+MANDATORY_TESTS:
+  - make test
+  - make test-coverage
+HARD_GATE_MODE: PARALLEL
+REVIEW_GATE_ALERT_MINUTES: 15
+REVIEW_POLICY:
+  VERSION: 1
+  # Explicit role profiles override shared CODEX_CMD model and reasoning
+  # defaults. Coder and indexer profiles may instead use INHERIT_GLOBAL: true.
+  AGENT_PROFILES:
+    coder:
+      MODEL: gpt-5.6-sol
+      REASONING_EFFORT: high
+    indexer:
+      MODEL: gpt-5.6-luna
+      REASONING_EFFORT: medium
+    discovery:
+      MODEL: gpt-5.6-terra
+      REASONING_EFFORT: high
+    discovery-critical:
+      MODEL: gpt-5.6-sol
+      REASONING_EFFORT: high
+    verifier:
+      MODEL: gpt-5.6-luna
+      REASONING_EFFORT: medium
+    challenge:
+      MODEL: gpt-5.6-sol
+      REASONING_EFFORT: xhigh
+    escalation:
+      MODEL: gpt-5.6-sol
+      REASONING_EFFORT: max
+  # Add deployment model aliases here with the efforts they support. Invalid
+  # or unavailable combinations fail before a Codex runtime is launched.
+  MODEL_CATALOG:
+    gpt-5.6-sol:
+      REASONING_EFFORTS: [none, low, medium, high, xhigh, max]
+      AVAILABLE: true
+    gpt-5.6-terra:
+      REASONING_EFFORTS: [none, low, medium, high, xhigh, max]
+      AVAILABLE: true
+    gpt-5.6-luna:
+      REASONING_EFFORTS: [none, low, medium, high, xhigh, max]
+      AVAILABLE: true
+  ROLE_PROFILES:
+    CODER: coder
+    INDEXER: indexer
+    DISCOVERY: discovery
+    VERIFIER: verifier
+    CHALLENGE: challenge
+    ESCALATION: escalation
+  # Lane-specific PROFILE values override the default DISCOVERY role.
+  REVIEW_SWARM:
+    MIN_REVIEWERS: 3
+    MAX_REVIEWERS: 6
+    MAX_PARALLEL_REVIEWERS: 6
+    TIMEOUT_MINUTES: 30
+    RETRIES: 1
+    LANES:
+      - NAME: contract
+        REQUIRED: true
+        PROFILE: discovery-critical
+      - NAME: callers
+        REQUIRED: true
+        PROFILE: discovery
+      - NAME: lifecycle
+        REQUIRED: false
+        PROFILE: discovery
+      - NAME: concurrency-ordering
+        REQUIRED: false
+        PROFILE: discovery
+      - NAME: persistence-recovery
+        REQUIRED: false
+        PROFILE: discovery
+      - NAME: operations-tests
+        REQUIRED: true
+        PROFILE: discovery
+  ARTIFACTS:
+    MAX_BYTES: 1048576
+    TIMEOUT_SECONDS: 30
+    RETRIES: 1
+  VERIFICATION:
+    MIN_VERIFIERS: 1
+    MAX_VERIFIERS: 3
+    MAX_PARALLEL_VERIFIERS: 2
+    TIMEOUT_MINUTES: 30
+    RETRIES: 1
+    REQUIRE_EVIDENCE: true
+    INCONCLUSIVE_ACTION: escalate
+  CONVERGENCE:
+    QUIET_ROUNDS_REQUIRED: 1
+    MAX_ROUNDS: 2
+    MAX_REVIEW_AGENTS_PER_SHA: 50
+    MAX_WALL_TIME_MINUTES: 600
+    MAX_USAGE_TOKENS: 2000000
+  ESCALATION:
+    AFTER_NON_CONVERGING_ROUNDS: 1
+    AFTER_CORRECTION_ROUNDS: 2
+    PROFILE: escalation
+  FAILURE_ACTIONS:
+    REQUIRED_LANE_FAILURE: escalate
+    VERIFICATION_FAILURE: escalate
+    BUDGET_EXHAUSTION: inconclusive
+MAX_STORED_HANDOFFS: 100
+MAX_HANDOFFS_IN_CONTEXT: 5

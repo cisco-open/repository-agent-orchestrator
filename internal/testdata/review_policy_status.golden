@@ -1,0 +1,23 @@
+Review Policy
+  state: convergent
+  version: 1
+  fingerprint: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  roles:
+    - coder: profile="coder" model="gpt-5.6-sol" effort="high" inherit_global=false
+    - indexer: profile="indexer" model="gpt-5.6-luna" effort="medium" inherit_global=false
+    - discovery: profile="discovery" model="gpt-5.6-terra" effort="high" inherit_global=false
+    - verifier: profile="verifier" model="gpt-5.6-terra" effort="high" inherit_global=false
+    - challenge: profile="challenge" model="gpt-5.6-sol" effort="xhigh" inherit_global=false
+    - escalation: profile="escalation" model="gpt-5.6-sol" effort="max" inherit_global=false
+  swarm: min=3 max=6 max_parallel=6 timeout_minutes=30 retries=1
+  lanes:
+    - contract: required=true profile="discovery" model="gpt-5.6-terra" effort="high" inherit_global=false
+    - callers: required=true profile="discovery" model="gpt-5.6-terra" effort="high" inherit_global=false
+    - lifecycle: required=false profile="discovery" model="gpt-5.6-terra" effort="high" inherit_global=false
+    - persistence-recovery: required=false profile="discovery" model="gpt-5.6-terra" effort="high" inherit_global=false
+    - concurrency-ordering: required=false profile="discovery" model="gpt-5.6-terra" effort="high" inherit_global=false
+    - operations-tests: required=true profile="discovery" model="gpt-5.6-terra" effort="high" inherit_global=false
+  artifacts: max_bytes=1048576 timeout_seconds=30 retries=1
+  verification: min=1 max=3 max_parallel=2 timeout_minutes=30 retries=1
+  convergence: quiet_rounds=1 max_rounds=2 max_agents_per_sha=50 max_wall_time_minutes=600 max_usage_tokens=2000000
+  escalation: after_non_converging_rounds=1 after_correction_rounds=2 profile="escalation"
