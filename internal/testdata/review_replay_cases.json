@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "ownership": "repository-agent-orchestrator",
+  "scenarios": [
+    {
+      "id": "initial-multi-defect",
+      "head_sha": "1111111111111111111111111111111111111111",
+      "seeded_findings": [
+        {"id": "caller-contract", "origin": "original"},
+        {"id": "lifecycle-shutdown", "origin": "original"},
+        {"id": "persistence-replay", "origin": "original"}
+      ],
+      "observations": [
+        {"pass": 1, "lane": "callers", "finding_ids": ["caller-contract"]},
+        {"pass": 1, "lane": "lifecycle", "finding_ids": ["lifecycle-shutdown"]},
+        {"pass": 1, "lane": "persistence-recovery", "finding_ids": ["persistence-replay"]},
+        {"pass": 1, "lane": "synthesis", "finding_ids": ["caller-contract", "lifecycle-shutdown", "persistence-replay"]},
+        {"pass": 2, "lane": "contract", "finding_ids": []},
+        {"pass": 2, "lane": "callers", "finding_ids": []},
+        {"pass": 2, "lane": "operations-tests", "finding_ids": []},
+        {"pass": 2, "lane": "synthesis", "finding_ids": []}
+      ],
+      "rounds": [
+        {"pass": 1, "executed": true, "completed_lanes": ["callers", "lifecycle", "persistence-recovery", "synthesis"], "outcome": "material", "synthesis_after_findings": true},
+        {"pass": 2, "executed": true, "completed_lanes": ["contract", "callers", "operations-tests", "synthesis"], "outcome": "quiet", "synthesis_after_findings": true}
+      ],
+      "unresolved_work": [],
+      "budget_exhausted": false,
+      "workers": {"allocated": 8, "completed": 8},
+      "expected_outcome": "changes_required"
+    },
+    {
+      "id": "correction-introduced-regression",
+      "head_sha": "2222222222222222222222222222222222222222",
+      "seeded_findings": [
+        {"id": "retry-ordering", "origin": "correction_introduced"}
+      ],
+      "observations": [
+        {"pass": 1, "lane": "concurrency-ordering", "finding_ids": ["retry-ordering"]},
+        {"pass": 1, "lane": "synthesis", "finding_ids": ["retry-ordering"]},
+        {"pass": 2, "lane": "contract", "finding_ids": []},
+        {"pass": 2, "lane": "callers", "finding_ids": []},
+        {"pass": 2, "lane": "operations-tests", "finding_ids": []},
+        {"pass": 2, "lane": "synthesis", "finding_ids": []}
+      ],
+      "rounds": [
+        {"pass": 1, "executed": true, "completed_lanes": ["concurrency-ordering", "synthesis"], "outcome": "material", "synthesis_after_findings": true},
+        {"pass": 2, "executed": true, "completed_lanes": ["contract", "callers", "operations-tests", "synthesis"], "outcome": "quiet", "synthesis_after_findings": true}
+      ],
+      "unresolved_work": [],
+      "budget_exhausted": false,
+      "workers": {"allocated": 6, "completed": 6},
+      "expected_outcome": "changes_required"
+    },
+    {
+      "id": "zero-work-cannot-be-quiet",
+      "head_sha": "3333333333333333333333333333333333333333",
+      "seeded_findings": [],
+      "observations": [],
+      "rounds": [
+        {"pass": 1, "executed": false, "completed_lanes": [], "outcome": "quiet", "synthesis_after_findings": false}
+      ],
+      "unresolved_work": [],
+      "budget_exhausted": false,
+      "workers": {"allocated": 0, "completed": 0},
+      "expected_outcome": "incomplete"
+    },
+    {
+      "id": "budget-with-unresolved-coverage",
+      "head_sha": "4444444444444444444444444444444444444444",
+      "seeded_findings": [],
+      "observations": [
+        {"pass": 1, "lane": "contract", "finding_ids": []},
+        {"pass": 1, "lane": "synthesis", "finding_ids": []}
+      ],
+      "rounds": [
+        {"pass": 1, "executed": true, "completed_lanes": ["contract", "synthesis"], "outcome": "unresolved", "synthesis_after_findings": true}
+      ],
+      "unresolved_work": ["coverage:restore-boundary"],
+      "budget_exhausted": true,
+      "workers": {"allocated": 2, "completed": 2},
+      "expected_outcome": "incomplete"
+    },
+    {
+      "id": "clean-complete",
+      "head_sha": "5555555555555555555555555555555555555555",
+      "seeded_findings": [],
+      "observations": [
+        {"pass": 1, "lane": "contract", "finding_ids": []},
+        {"pass": 1, "lane": "callers", "finding_ids": []},
+        {"pass": 1, "lane": "operations-tests", "finding_ids": []},
+        {"pass": 1, "lane": "synthesis", "finding_ids": []}
+      ],
+      "rounds": [
+        {"pass": 1, "executed": true, "completed_lanes": ["contract", "callers", "operations-tests", "synthesis"], "outcome": "quiet", "synthesis_after_findings": true}
+      ],
+      "unresolved_work": [],
+      "budget_exhausted": false,
+      "workers": {"allocated": 4, "completed": 4},
+      "expected_outcome": "approved"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+# Binaries
+/bin/
+/repository-agent-orchestrator
+
+# Test and coverage artifacts
+*.out
+*.test
+coverage.txt
+.coverage/
+
+# Repository Agent Orchestrator runtime artifacts
+/.repository-agent-orchestrator/
+/.worktrees/
+
+# Local deployment configuration
+/config/*
+!/config/sample.yaml
+!/config/sample-swarm-minimal.yaml
+!/config/sample-swarm.yaml
+
+# macOS
+.DS_Store
